@@ -27,7 +27,7 @@
       name: 'webrtc',
       room: 'hackAR4'
     },
-    sourceDir: '/yjs',
+    sourceDir: './yjs',
     share: {
       drawings: 'Array' // y.share.textarea is of type Y.Text
     }
