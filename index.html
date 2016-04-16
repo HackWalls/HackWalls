@@ -6,36 +6,28 @@
       height: 100%;
       width: 100%;
     }
-
-    .menu-area {
-      position:absolute;
-      left:0;
-      right:0;
-      top:0;
-      bottom:0;
-    }
   </style>
 
   <link rel="stylesheet" href="circular-menu.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
-  <div id="main">
+  <div id="main" class="menu-area">
     <canvas id="c"></canvas>
+
+    <nav class="circular-menu">
+      <div class="circle">
+        <a href="" class="fa fa-pencil fa-2x delay-1" style="color:black;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-2" style="color:red;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-3" style="color:green;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-4" style="color:blue;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-5" style="color:orange;"></a>
+        <a href="" class="fa fa-eraser fa-2x delay-6" style="color:black;"></a>
+      </div>
+    </nav>
   </div>
 
-    <div class="menu-area">
-      <nav class="circular-menu">
-        <div class="circle">
-          <a href="" class="fa fa-pencil fa-2x delay-1" style="color:black;"></a>
-          <a href="" class="fa fa-pencil fa-2x delay-2" style="color:red;"></a>
-          <a href="" class="fa fa-pencil fa-2x delay-3" style="color:green;"></a>
-          <a href="" class="fa fa-pencil fa-2x delay-4" style="color:blue;"></a>
-          <a href="" class="fa fa-pencil fa-2x delay-5" style="color:orange;"></a>
-          <a href="" class="fa fa-eraser fa-2x delay-6" style="color:black;"></a>
-        </div>
-      </nav>
-    </div>
-    <script src="circular-menu.js"></script>
+  <script src="circular-menu.js"></script>
 
   <script src="../bower_components/yjs/y.es6"></script>
   <script src="../bower_components/fabric.js/dist/fabric.min.js"></script>
