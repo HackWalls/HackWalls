@@ -2,7 +2,9 @@
   "name": "hackAr",
   "main": "index.html",
   "authors": [
-    "Kevin Jahns <kevin.jahns@rwth-aachen.de>"
+    "Kevin Jahns <kevin.jahns@rwth-aachen.de>",
+    "Jasper Nalbach <jasper.nalbach@rwth-aachen.de>",
+    "Alexander Ruppert <alexander.ruppert@rwth-aachen.de>"
   ],
   "description": "Shared AR Grafitti",
   "moduleType": [
