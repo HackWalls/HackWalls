@@ -10,8 +10,8 @@
   window.hammer = new Hammer(document.querySelector('#main'))
 
   // not globals :(
-  var gWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
-  var gHeight = window.innerHeight > 0 ? window.innerHeight : screen.height
+  var gWidth = 1000;//window.innerWidth > 0 ? window.innerWidth : screen.width
+  var gHeight = 1000;//window.innerHeight > 0 ? window.innerHeight : screen.height
   var canvas = this.__canvas = new fabric.Canvas('c', {
     // isDrawingMode: true,
     width: gWidth,

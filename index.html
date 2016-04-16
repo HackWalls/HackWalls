@@ -23,13 +23,20 @@
 
     #main {
       position: absolute;
-      /*top: 0;
+      top: 0;
       left: 0;
       width:100%;
       height:100%;
-*/
-      border:#ddd solid 1px;
     }
+
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width:100%;
+      height:100%;
+    }
+
   </style>
 
   <link rel="stylesheet" href="circular-menu.css" />
@@ -38,7 +45,10 @@
 <body>
   <video id="video" preload autoplay loop muted></video>
   <div id="main" class="menu-area">
-    <canvas id="c"></canvas>
+    <div id="overlay" style="background-color:green;">
+      <!--<canvas id="c"></canvas>-->
+
+    </div>
 
     <nav class="circular-menu">
       <div class="circle">
@@ -51,16 +61,16 @@
     </nav>
   </div>
 
-  <canvas id="videoCanvas" hidden></canvas>
+  <canvas id="videoCanvas"></canvas>
 
   <script src="yjs/yjs/y.es6"></script>
   <script src="bower_components/fabric.js/dist/fabric.min.js"></script>
   <script src="bower_components/hammerjs/hammer.js"></script>
-  <script src="bower_components/perspective-transform/dist/perspective-transform.min.js"></script>
+  <script src="bower_components/perspective-transform/dist/perspective-transform.js"></script>
   <script src="bower_components/js_marker_detector/cv.js"></script>
   <script src="bower_components/js_marker_detector/polyfill.js"></script>
   <script src="bower_components/js_marker_detector/pupil.js"></script>
-  <script src="index.js"></script>
+  <!--<script src="index.js"></script>-->
   <script src="circular-menu.js"></script>
   <script>
     function setColor(color) {

@@ -1,8 +1,10 @@
-function VideoCapture (video, canvas, overlay) {
+function VideoCapture (video, canvas, overlay, main) {
   this.isStreaming = false;
   this.video = video;
   this.overlay = overlay;
+  this.main = main;
   this.transformCorners = null;
+  this.canvas = canvas;
   this.context = canvas.getContext("2d");
   navigator.getMedia = (navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
@@ -29,8 +31,18 @@ function VideoCapture (video, canvas, overlay) {
   var self = this;
   video.addEventListener('canplay', function(ev) {
     if (!self.streaming) {
+
+
+      self.canvas.setAttribute("width","100%");
+      self.canvas.setAttribute("height","100%");
+
       self.streaming = true;
       self.resizeOverlay();
+
+      self.canvas.width = self.video.videoWidth;
+      self.canvas.height = self.video.videoHeight;
+
+      self.context = self.canvas.getContext("2d");
     }
   }, false);
 
@@ -40,28 +52,63 @@ function VideoCapture (video, canvas, overlay) {
 }
 
 VideoCapture.prototype.setTransformation = function(corners) {
-  console.log(corners);
   this.transformCorners= [corners[0].x,corners[0].y,corners[1].x,corners[1].y,corners[2].x,corners[2].y,corners[3].x,corners[3].y];
   this.resizeOverlay();
 }
 
 VideoCapture.prototype.resizeOverlay = function() {
+  var ratio = this.video.videoWidth / this.video.videoHeight;
+  var width, height;
+
+  if (this.video.offsetWidth / this.video.offsetHeight < ratio) { // horizontal
+    this.main.style.width = this.video.offsetWidth + 'px';
+    var trueHeight = this.video.offsetWidth / ratio;
+    var difference = this.video.offsetHeight - trueHeight;
+    this.main.style.height = trueHeight + 'px';
+    this.main.style.top = difference / 2 + 'px';
+    this.main.style.left = '0px';
+    width = this.video.offsetWidth;
+    height = trueHeight;
+  } else { // vertical
+    this.main.style.height = this.video.offsetHeight + 'px';
+    var trueWidth = this.video.offsetHeight * ratio;
+    var difference = this.video.offsetWidth - trueWidth;
+    this.main.style.width = trueWidth + 'px';
+    this.main.style.left = difference / 2 + 'px';
+    this.main.style.top = '0px';
+    height = this.video.offsetHeight;
+    width = trueWidth;
+  }
+
+  this.overlay.style.width = Math.min(width,height)+"px";
+  this.overlay.style.height = this.overlay.style.width;
+  this.overlay.style.left = (width-Math.min(width,height))/2 + "px";
+  this.overlay.style.top = (height-Math.min(width,height))/2 + "px";
+
   if (this.transformCorners == null)
     return;
 
-  var offsetTop = (gHeight - this.video.videoHeight)/2;
-  var offsetLeft = (gWidth - this.video.videoWidth)/2;
+console.log("points", this.transformCorners);
 
-  this.overlay.height = gHeight + "px";
-  this.overlay.width = this.overlay.height + "px";
-  this.overay.top = offsetTop + "px";
-  this.overlay.left = offsetLeft + "px";
+  var srcCorners = [this.overlay.offsetLeft, 0,
+    this.overlay.offsetLeft+this.overlay.offsetWidth,0,
+    this.overlay.offsetLeft+this.overlay.offsetWidth, 0+this.overlay.offsetHeight,
+    this.overlay.offsetLeft, 0+this.overlay.offsetHeight];
 
-  var srcCorners = [0, offsetLeft, 0, this.video.videoWeight-offsetLeft, this.video.videoHeight, offsetLeft, this.video.videoHeight, gWidththis.video.videoWeight-offsetLeft];
+    console.log("src",srcCorners);
+
   var perspT = PerspT(srcCorners, this.transformCorners);
 
-  this.overlay.style.transform = "matrix3d("+perspT.coeffs.join(",")+")";
-  this.overlay.style.transformOrigin = '0 0';
+  console.log(perspT.coeffs);
+
+  var bums = [perspT.coeffs[0],perspT.coeffs[3],0,perspT.coeffs[6],
+              perspT.coeffs[1],perspT.coeffs[4],0,perspT.coeffs[7],
+              0,0,1,0,
+              perspT.coeffs[2],perspT.coeffs[5],0,perspT.coeffs[8]
+              ];
+
+  this.overlay.style.transform = "matrix3d("+bums.join(",")+")";
+//  this.overlay.style.transformOrigin = '50% 50%';
 }
 
 VideoCapture.prototype.getImageData = function() {
@@ -75,8 +122,8 @@ VideoCapture.prototype.getImageData = function() {
 
 }
 
-var video = new VideoCapture(document.getElementById("video"), document.getElementById("videoCanvas"), document.getElementById("canvas"));
-updateCorners(video.setTransformation);
+var vid = new VideoCapture(document.getElementById("video"), document.getElementById("videoCanvas"), document.getElementById("overlay"), document.getElementById("main"));
+updateCorners(function(a) {vid.setTransformation(a);});
 
 
 function updateCorners(callback) {
@@ -129,8 +176,9 @@ function updateCorners(callback) {
 
 
   }
-/*
+
   function drawCorners(markers) {
+    var overlayCanvas = document.getElementById("c");
     var corners, corner, i, j;
     var context = overlayCanvas.getContext("2d");
     context.lineWidth = 3;
@@ -160,14 +208,15 @@ function updateCorners(callback) {
 
     }
   }
-*/
+
 
 
   setInterval(function() {
-    var data = video.getImageData();
+    var data = vid.getImageData();
     if (data == null) {
       return;
     }
+
     var markers = detector.detect(data);
 
     var temp = getCorners(markers);
@@ -177,13 +226,13 @@ function updateCorners(callback) {
     if (temp) {
       var difference = Math.abs(temp[0].x - currentCorners[0].x);
 
-      if (difference > 50 && difference < 400) {
+      //if (difference > 50 && difference < 400) {
         currentCorners = temp;
         callback(currentCorners);
-      }
+      //}
 
     }
 
-  //  drawCorners(markers);
+    //drawCorners(markers);
   }, 500);
 }
