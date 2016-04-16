@@ -33,6 +33,8 @@
     "y-memory": "~8.0.3",
     "y-array": "~8.1.2",
     "hammerjs": "hammer.js#~2.0.6",
-    "tracking": "~1.1.2"
+    "tracking": "~1.1.2",
+    "perspective-transform": "~1.1.3",
+    "js_marker_detector": "https://github.com/pachacamac/js_marker_detector.git"
   }
 }

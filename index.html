@@ -23,11 +23,11 @@
 
     #main {
       position: absolute;
-      top: 0;
+      /*top: 0;
       left: 0;
       width:100%;
       height:100%;
-
+*/
       border:#ddd solid 1px;
     }
   </style>
@@ -38,7 +38,6 @@
 <body>
   <video id="video" preload autoplay loop muted></video>
   <div id="main" class="menu-area">
-
     <canvas id="c"></canvas>
 
     <nav class="circular-menu">
@@ -51,9 +50,16 @@
       </div>
     </nav>
   </div>
+
+  <canvas id="videoCanvas" hidden></canvas>
+
   <script src="yjs/yjs/y.es6"></script>
   <script src="bower_components/fabric.js/dist/fabric.min.js"></script>
   <script src="bower_components/hammerjs/hammer.js"></script>
+  <script src="bower_components/perspective-transform/dist/perspective-transform.min.js"></script>
+  <script src="bower_components/js_marker_detector/cv.js"></script>
+  <script src="bower_components/js_marker_detector/polyfill.js"></script>
+  <script src="bower_components/js_marker_detector/pupil.js"></script>
   <script src="index.js"></script>
   <script src="circular-menu.js"></script>
   <script>
@@ -62,8 +68,5 @@
     }
   </script>
   <script src="video-capture.js"></script>
-  <script>
-    var video = new VideoCapture(document.getElementById("video"), document.getElementById("canvas"));
-  </script>
 </body>
 </html>
