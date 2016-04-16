@@ -15,6 +15,7 @@ hammer.on('press', function(event) {
   } else {
     document.querySelector('.circle').classList.remove('open');
   }
+  event.preventDefault()
 })
 
 
