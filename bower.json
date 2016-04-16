@@ -1,0 +1,32 @@
+{
+  "name": "hackAr",
+  "main": "index.html",
+  "authors": [
+    "Kevin Jahns <kevin.jahns@rwth-aachen.de>"
+  ],
+  "description": "Shared AR Grafitti",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "AR",
+    "hackAR",
+    "Yjs",
+    "Draw"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "y-websockets-client": "~8.0.6",
+    "y-webrtc": "~8.0.2",
+    "fabric.js": "fabric#~1.6.0"
+  }
+}
