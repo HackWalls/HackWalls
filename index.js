@@ -1,6 +1,11 @@
 
 (function() {
   var $ = function(id){return document.getElementById(id)}
+  // change this to update the strokes
+  window.paintConfig = {
+    color: 'blue',
+    strokeWidth: 15
+  }
 
   var gWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
   var gHeight = window.innerHeight > 0 ? window.innerHeight : screen.height
@@ -96,9 +101,9 @@
     y.share.drawings.insert(pos, [Y.Array])
     y.share.drawings.get(pos).then(function (array) {
       yPath = array
-      var strokeWidth = 7
+      var strokeWidth = paintConfig.strokeWidth
       yPath.insert(0, [{
-        color: 'blue',
+        color: paintConfig.color,
         strokeWidth: strokeWidth
       }, [(event.e.x - strokeWidth) / gWidth, (event.e.y - strokeWidth) / gHeight]])
     })
@@ -112,6 +117,6 @@
       yPath.push([[(event.e.x - strokeWidth) / gWidth, (event.e.y - strokeWidth) / gHeight]])
     }
   })
-  fabric.Object.prototype.transparentCorners = false;
+  fabric.Object.prototype.transparentCorners = false
 
 })();
