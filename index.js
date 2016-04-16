@@ -7,7 +7,7 @@
       return [c[0]*gWidth, c[1]*gHeight] // relative coordinates to absolute coordinates
     })
     if (array.length > 1) {
-      var path = ['M', array[0][0], array[0][1]]
+      var path = [['M', array[0][0], array[0][1]]]
       for (var i = 1; i < array.length - 1; i++) {
         path.push(['Q', array[i-1][0], array[i-1][1], array[i][0], array[i][1]])
       }
@@ -33,7 +33,7 @@
     },
     connector: {
       name: 'webrtc',
-      room: 'hackAR'
+      room: 'hackAR1'
     },
     sourceDir: '/bower_components',
     share: {
@@ -42,25 +42,28 @@
   }).then(function (y) {
     window.y = y
 
+    function resetPath (path, type) {
+      path.path = computeBezierCourve(type)
+      var dims = path._parseDimensions()
+      path.setWidth(dims.width)
+      path.setHeight(dims.height)
+      path.pathOffset.x = path.width/2
+      path.pathOffset.y = path.height/2
+      path.setCoords()
+      canvas.renderAll()
+    }
     function drawElement (t) {
       if (t instanceof Y.Array.typeDefinition.class) {
         var path = new fabric.Path()
         path.selectable = false
-        path.path = computeBezierCourve(t)
         path.fill = null
         path.stroke = 'blue'
         canvas.add(path)
+        resetPath(path, t)
         t.observe(function (events) {
           console.log('#1')
           events.forEach(function (e) {
-            path.path = computeBezierCourve(t)
-            var dims = path._parseDimensions()
-            path.setWidth(dims.width)
-            path.setHeight(dims.height)
-            path.pathOffset.x = path.width/2
-            path.pathOffset.y = path.height/2
-            path.setCoords()
-            canvas.renderAll()
+            resetPath(path, t)
           })
         })
       }
