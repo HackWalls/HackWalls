@@ -1,0 +1,33 @@
+{
+  "name": "y-websockets-client",
+  "version": "8.0.6",
+  "homepage": "http://y-js.org",
+  "authors": [
+    "Kevin Jahns <kevin.jahns@rwth-aachen.de>"
+  ],
+  "description": "Websockets connector for Yjs (browser/node client)",
+  "main": "./y-websockets-client.js",
+  "keywords": [
+    "Yjs",
+    "OT",
+    "Collaboration",
+    "Synchronization",
+    "ShareJS",
+    "Coweb",
+    "Concurrency"
+  ],
+  "license": "MIT",
+  "ignore": [],
+  "dependencies": {
+    "yjs": "^10.0.0"
+  },
+  "_release": "8.0.6",
+  "_resolution": {
+    "type": "version",
+    "tag": "v8.0.6",
+    "commit": "754d781c3d58c0cd5450be4080b79ecc837b848d"
+  },
+  "_source": "https://github.com/y-js/y-websockets-client.git",
+  "_target": "~8.0.6",
+  "_originalSource": "y-websockets-client"
+}
