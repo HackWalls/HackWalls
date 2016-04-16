@@ -29,6 +29,8 @@
   "dependencies": {
     "y-websockets-client": "~8.0.6",
     "y-webrtc": "~8.0.2",
-    "fabric.js": "fabric#~1.6.0"
+    "fabric.js": "fabric#~1.6.0",
+    "y-memory": "~8.0.3",
+    "y-array": "~8.1.2"
   }
 }
