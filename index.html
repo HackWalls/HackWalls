@@ -17,11 +17,11 @@
 
     <nav class="circular-menu">
       <div class="circle">
-        <a href="" class="fa fa-pencil fa-2x delay-1 active" style="color:black;"></a>
-        <a href="" class="fa fa-pencil fa-2x delay-2" style="color:red;"></a>
-        <a href="" class="fa fa-pencil fa-2x delay-3" style="color:green;"></a>
-        <a href="" class="fa fa-pencil fa-2x delay-4" style="color:blue;"></a>
-        <a href="" class="fa fa-pencil fa-2x delay-5" style="color:orange;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-1" style="color:black;" onclick="setColor('black')"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-2" style="color:red;" onclick="setColor('red')"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-3" style="color:green;" onclick="setColor('green')"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-4 active" style="color:blue;" onclick="setColor('blue')"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-5" style="color:orange;" onclick="setColor('orange')"></a>
         <a href="" class="fa fa-eraser fa-2x delay-6" style="color:black;"></a>
       </div>
     </nav>
@@ -31,5 +31,10 @@
   <script src="/bower_components/hammerjs/hammer.js"></script>
   <script src="./index.js"></script>
   <script src="circular-menu.js"></script>
+  <script>
+    function setColor(color) {
+      window.paintConfig.color = color;
+    }
+  </script>
 </body>
 </html>
