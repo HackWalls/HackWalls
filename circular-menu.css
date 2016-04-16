@@ -74,6 +74,6 @@
   opacity: 1;
 }
 
-.circle a:hover {
-  color: #eef;
+.circle a:hover, .circle a.active {
+  background-color: #eee;
 }

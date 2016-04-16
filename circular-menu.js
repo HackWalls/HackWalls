@@ -28,5 +28,10 @@ for (i = 0; i < links.length; i++) {
   links[i].onclick = function(e) {
     e.preventDefault();
     document.querySelector('.circle').classList.remove('open');
+
+    for (x = 0; x < links.length; x++) {
+      links[x].classList.remove('active');
+    }
+    event.target.classList.add('active');
   }
 }
