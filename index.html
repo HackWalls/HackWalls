@@ -2,9 +2,33 @@
 <html>
 <head>
   <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      width:100%;
+      height:100%;
+    }
+
+    body {
+      width:calc(100% - 2px);
+      height:calc(100% - 2px);
+      position: relative;
+      overflow:hidden;
+    }
+
+    #video {
+      width:100%;
+      height:100%;
+    }
+
     #main {
-      height: 100%;
-      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width:100%;
+      height:100%;
+
+      border:#ddd solid 1px;
     }
   </style>
 
@@ -12,7 +36,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
+  <video id="video" preload autoplay loop muted></video>
   <div id="main" class="menu-area">
+
     <canvas id="c"></canvas>
 
     <nav class="circular-menu">
@@ -34,6 +60,10 @@
     function setColor(color) {
       window.paintConfig.color = color;
     }
+  </script>
+  <script src="video-capture.js"></script>
+  <script>
+    var video = new VideoCapture(document.getElementById("video"), document.getElementById("canvas"));
   </script>
 </body>
 </html>
