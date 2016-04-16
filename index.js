@@ -90,7 +90,7 @@
     })
   })
   canvas.on('mouse:up', function () {
-    yPath = null 
+    yPath = null
   })
   canvas.on('mouse:move', function (event) {
     if (!!yPath) {

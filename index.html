@@ -7,12 +7,27 @@
       width: 100%;
     }
   </style>
+
+  <link rel="stylesheet" href="circular-menu.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 </head>
 <body>
-  <div id="main">
+  <div id="main" class="menu-area">
     <canvas id="c"></canvas>
+
+    <nav class="circular-menu">
+      <div class="circle">
+        <a href="" class="fa fa-pencil fa-2x delay-1 active" style="color:black;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-2" style="color:red;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-3" style="color:green;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-4" style="color:blue;"></a>
+        <a href="" class="fa fa-pencil fa-2x delay-5" style="color:orange;"></a>
+        <a href="" class="fa fa-eraser fa-2x delay-6" style="color:black;"></a>
+      </div>
+    </nav>
   </div>
   <script src="../yjs/yjs/y.es6"></script>
+  <script src="circular-menu.js"></script>
   <script src="../bower_components/fabric.js/dist/fabric.min.js"></script>
   <script src="./index.js"></script>
 </body>
