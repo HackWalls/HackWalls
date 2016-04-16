@@ -1,0 +1,35 @@
+{
+  "name": "y-richtext",
+  "version": "8.0.4",
+  "homepage": "http://y-js.org",
+  "authors": [
+    "corentin.cadiou@linagora.com",
+    "kevin.jahns@rwth-aachen.de"
+  ],
+  "description": "Rich Text type for Yjs",
+  "main": "./y-richtext.js",
+  "keywords": [
+    "Yjs",
+    "OT",
+    "Collaboration",
+    "Synchronization",
+    "ShareJS",
+    "Coweb",
+    "Concurrency"
+  ],
+  "license": "MIT",
+  "ignore": [],
+  "dependencies": {
+    "yjs": "^10.0.0",
+    "y-array": "^8.0.0"
+  },
+  "_release": "8.0.4",
+  "_resolution": {
+    "type": "version",
+    "tag": "v8.0.4",
+    "commit": "8a2593c97207578429e7c75ed7bbd2521f21cfd9"
+  },
+  "_source": "git://github.com/y-js/y-richtext.git",
+  "_target": "*",
+  "_originalSource": "y-richtext"
+}
