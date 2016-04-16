@@ -33,9 +33,9 @@
     },
     connector: {
       name: 'webrtc',
-      room: 'hackAR1'
+      room: 'hackAR2'
     },
-    sourceDir: '/bower_components',
+    sourceDir: '/yjs',
     share: {
       drawings: 'Array' // y.share.textarea is of type Y.Text
     }
@@ -61,7 +61,6 @@
         canvas.add(path)
         resetPath(path, t)
         t.observe(function (events) {
-          console.log('#1')
           events.forEach(function (e) {
             resetPath(path, t)
           })
@@ -74,8 +73,8 @@
     }
     y.share.drawings.observe(function (events) {
       events.forEach(function (e) {
-        e.value().then(function (t) {
-          drawElement(t)
+        e.values().then(function (types) {
+          types.forEach(drawElement)
         })
       })
     })
@@ -95,7 +94,6 @@
   })
   canvas.on('mouse:move', function (event) {
     if (!!yPath) {
-      console.log('move')
       yPath.push([[event.e.x / gWidth, event.e.y / gHeight]])
     }
   })
