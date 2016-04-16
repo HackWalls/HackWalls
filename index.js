@@ -1,12 +1,15 @@
 
 (function() {
   var $ = function(id){return document.getElementById(id)}
+  // GLOBALS!
   // change this to update the strokes
   window.paintConfig = {
     color: 'blue',
     strokeWidth: 15
   }
+  window.hammer = new Hammer(document.querySelector('#main'))
 
+  // not globals :(
   var gWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
   var gHeight = window.innerHeight > 0 ? window.innerHeight : screen.height
   var canvas = this.__canvas = new fabric.Canvas('c', {
@@ -22,7 +25,7 @@
     },
     connector: {
       name: 'webrtc',
-      room: 'hackAR3'
+      room: 'hackAR4'
     },
     sourceDir: '/yjs',
     share: {
@@ -95,28 +98,31 @@
     })
   })
 
-  var yPath = null
-  canvas.on('mouse:down', function (event) {
-    var pos = y.share.drawings.length
-    y.share.drawings.insert(pos, [Y.Array])
-    y.share.drawings.get(pos).then(function (array) {
-      yPath = array
-      var strokeWidth = paintConfig.strokeWidth
-      yPath.insert(0, [{
-        color: paintConfig.color,
-        strokeWidth: strokeWidth
-      }, [(event.e.x - strokeWidth) / gWidth, (event.e.y - strokeWidth) / gHeight]])
-    })
-  })
-  canvas.on('mouse:up', function () {
-    yPath = null
-  })
-  canvas.on('mouse:move', function (event) {
-    if (!!yPath) {
+  var yPath = false
+  // listen to events...
+  hammer.on('pan', function (event) {
+    var xPos = event.center.x
+    var yPos = event.center.y
+    console.log(event)
+    if (yPath === false) {
+      yPath = null // trying to set yPath..
+      var pos = y.share.drawings.length
+      y.share.drawings.insert(pos, [Y.Array])
+      y.share.drawings.get(pos).then(function (array) {
+        yPath = array
+        var strokeWidth = paintConfig.strokeWidth
+        yPath.insert(0, [{
+          color: paintConfig.color,
+          strokeWidth: strokeWidth
+        }, [(xPos - strokeWidth) / gWidth, (yPos - strokeWidth) / gHeight]])
+      })
+    } else if (yPath != null) {
       var strokeWidth = yPath.get(0).strokeWidth
-      yPath.push([[(event.e.x - strokeWidth) / gWidth, (event.e.y - strokeWidth) / gHeight]])
+      yPath.push([[(xPos - strokeWidth) / gWidth, (yPos - strokeWidth) / gHeight]])
+    }
+    if (event.isFinal) {
+      yPath = false
     }
   })
   fabric.Object.prototype.transparentCorners = false
-
-})();
+})()
