@@ -1,21 +1,10 @@
 
 (function() {
-  var $ = function(id){return document.getElementById(id)};
-
-  function computeBezierCourve(yarray) {
-    var array = yarray.toArray().map(function (c) {
-      return [c[0]*gWidth, c[1]*gHeight] // relative coordinates to absolute coordinates
-    })
-    if (array.length > 1) {
-      var path = [['M', array[0][0], array[0][1]]]
-      for (var i = 1; i < array.length - 1; i++) {
-        path.push(['Q', array[i-1][0], array[i-1][1], array[i][0], array[i][1]])
-      }
-      path.push(['L', array[array.length - 1][0], array[array.length - 1][1]])
-      return path
-    } else {
-      return []
-    }
+  var $ = function(id){return document.getElementById(id)}
+  // change this to update the strokes
+  window.paintConfig = {
+    color: 'blue',
+    strokeWidth: 15
   }
 
   var gWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
@@ -25,7 +14,7 @@
     width: gWidth,
     height: gHeight
   })
-  canvas.selection = false;
+  canvas.selection = false
 
   Y({
     db: {
@@ -33,7 +22,7 @@
     },
     connector: {
       name: 'webrtc',
-      room: 'hackAR2'
+      room: 'hackAR3'
     },
     sourceDir: '/yjs',
     share: {
@@ -41,15 +30,42 @@
     }
   }).then(function (y) {
     window.y = y
-
-    function resetPath (path, type) {
-      path.path = computeBezierCourve(type)
-      var dims = path._parseDimensions()
-      path.setWidth(dims.width)
-      path.setHeight(dims.height)
-      path.pathOffset.x = path.width/2
-      path.pathOffset.y = path.height/2
-      path.setCoords()
+    function computePath(drawingPath, yarray) {
+      // array should contain additional information  (as object) as the first elemnt
+      // the rest are path coordinates
+      var array = yarray.toArray().map(function (c, i) {
+        if (i !== 0) {
+          return [c[0]*gWidth, c[1]*gHeight] // relative coordinates to absolute coordinates
+        } else {
+          return c
+        }
+      })
+      var drawingPathProperties = array[0]
+      // don't return anything if incomplete
+      if (array.length > 2) {
+        // transform path to bezier courve
+        var path = [['M', array[1][0], array[1][1]]]
+        for (var i = 2; i < array.length - 1; i++) {
+          path.push(['Q', array[i-1][0], array[i-1][1], array[i][0], array[i][1]])
+        }
+        path.push(['L', array[array.length - 1][0], array[array.length - 1][1]])
+        drawingPath.path = path
+      } else {
+        drawingPath.path = []
+        drawingPathProperties = {
+          color: null,
+          strokeWidth: 7
+        }
+      }
+      drawingPath.stroke = drawingPathProperties.color
+      drawingPath.strokeWidth = drawingPathProperties.strokeWidth
+      // render path
+      var dims = drawingPath._parseDimensions()
+      drawingPath.setWidth(dims.width)
+      drawingPath.setHeight(dims.height)
+      drawingPath.pathOffset.x = drawingPath.width/2
+      drawingPath.pathOffset.y = drawingPath.height/2
+      drawingPath.setCoords()
       canvas.renderAll()
     }
     function drawElement (t) {
@@ -57,12 +73,11 @@
         var path = new fabric.Path()
         path.selectable = false
         path.fill = null
-        path.stroke = 'blue'
         canvas.add(path)
-        resetPath(path, t)
+        computePath(path, t)
         t.observe(function (events) {
           events.forEach(function (e) {
-            resetPath(path, t)
+            computePath(path, t)
           })
         })
       }
@@ -86,97 +101,22 @@
     y.share.drawings.insert(pos, [Y.Array])
     y.share.drawings.get(pos).then(function (array) {
       yPath = array
-      yPath.insert(0, [[event.e.x / gWidth, event.e.y / gHeight]])
+      var strokeWidth = paintConfig.strokeWidth
+      yPath.insert(0, [{
+        color: paintConfig.color,
+        strokeWidth: strokeWidth
+      }, [(event.e.x - strokeWidth) / gWidth, (event.e.y - strokeWidth) / gHeight]])
     })
   })
   canvas.on('mouse:up', function () {
-    yPath = null 
+    yPath = null
   })
   canvas.on('mouse:move', function (event) {
     if (!!yPath) {
-      yPath.push([[event.e.x / gWidth, event.e.y / gHeight]])
+      var strokeWidth = yPath.get(0).strokeWidth
+      yPath.push([[(event.e.x - strokeWidth) / gWidth, (event.e.y - strokeWidth) / gHeight]])
     }
   })
-  fabric.Object.prototype.transparentCorners = false;
+  fabric.Object.prototype.transparentCorners = false
 
-  if (fabric.PatternBrush) {
-    var vLinePatternBrush = new fabric.PatternBrush(canvas);
-    vLinePatternBrush.getPatternSrc = function() {
-      var patternCanvas = fabric.document.createElement('canvas')
-      patternCanvas.width = patternCanvas.height = 10
-      var ctx = patternCanvas.getContext('2d')
-
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(0, 5);
-      ctx.lineTo(10, 5);
-      ctx.closePath();
-      ctx.stroke();
-
-      return patternCanvas;
-    };
-
-    var hLinePatternBrush = new fabric.PatternBrush(canvas);
-    hLinePatternBrush.getPatternSrc = function() {
-
-      var patternCanvas = fabric.document.createElement('canvas');
-      patternCanvas.width = patternCanvas.height = 10;
-      var ctx = patternCanvas.getContext('2d');
-
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 5;
-      ctx.beginPath();
-      ctx.moveTo(5, 0);
-      ctx.lineTo(5, 10);
-      ctx.closePath();
-      ctx.stroke();
-
-      return patternCanvas;
-    };
-
-    var squarePatternBrush = new fabric.PatternBrush(canvas);
-    squarePatternBrush.getPatternSrc = function() {
-
-      var squareWidth = 10, squareDistance = 2;
-
-      var patternCanvas = fabric.document.createElement('canvas');
-      patternCanvas.width = patternCanvas.height = squareWidth + squareDistance;
-      var ctx = patternCanvas.getContext('2d');
-
-      ctx.fillStyle = this.color;
-      ctx.fillRect(0, 0, squareWidth, squareWidth);
-
-      return patternCanvas;
-    };
-
-    var diamondPatternBrush = new fabric.PatternBrush(canvas);
-    diamondPatternBrush.getPatternSrc = function() {
-
-      var squareWidth = 10, squareDistance = 5;
-      var patternCanvas = fabric.document.createElement('canvas');
-      var rect = new fabric.Rect({
-        width: squareWidth,
-        height: squareWidth,
-        angle: 45,
-        fill: this.color
-      });
-
-      var canvasWidth = rect.getBoundingRectWidth();
-
-      patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
-      rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
-
-      var ctx = patternCanvas.getContext('2d');
-      rect.render(ctx);
-
-      return patternCanvas;
-    }
-  }
-
-  if (canvas.freeDrawingBrush) {
-    canvas.freeDrawingBrush.color = 'blue';
-    canvas.freeDrawingBrush.width = 1;
-    canvas.freeDrawingBrush.shadowBlur = 0;
-  }
 })();

@@ -1,0 +1,14 @@
+{
+  "name": "Event.js",
+  "homepage": "https://github.com/mudcube/Event.js",
+  "_release": "a4f8d18913",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "a4f8d1891322225f91d0e80458d992eb7aba8bfd"
+  },
+  "_source": "https://github.com/mudcube/Event.js.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/mudcube/Event.js.git",
+  "_direct": true
+}
