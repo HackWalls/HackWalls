@@ -25,7 +25,8 @@
     },
     connector: {
       name: 'webrtc',
-      room: 'hackAR4'
+      room: 'hackAR5',
+      url: 'https://yjs.dbis.rwth-aachen.de:5078'
     },
     sourceDir: './yjs',
     share: {
@@ -103,7 +104,6 @@
   hammer.on('pan', function (event) {
     var xPos = event.center.x
     var yPos = event.center.y
-    console.log(event)
     if (yPath === false) {
       yPath = null // trying to set yPath..
       var pos = y.share.drawings.length
