@@ -8,6 +8,7 @@ for(var i = 0, l = items.length; i < l; i++) {
   items[i].style.top = (50 + 35*Math.sin(-0.5 * Math.PI - 2*(1/l)*i*Math.PI)).toFixed(4) + "%";
 }
 
+/*
 document.querySelector('.menu-area').oncontextmenu = function(e) {
   e.preventDefault();
    if (!document.querySelector('.circle').classList.contains('open')) {
@@ -16,12 +17,17 @@ document.querySelector('.menu-area').oncontextmenu = function(e) {
       document.querySelector('.circle').classList.add('open');
    }
 }
-
-document.querySelector('.menu-area').onclick = function(e) {
-  if (document.querySelector('.circle').classList.contains('open')) {
-   document.querySelector('.circle').classList.remove('open');
+*/
+hammer.on('press', function(event) {
+  if (!document.querySelector('.circle').classList.contains('open')) {
+    document.querySelector('.circular-menu').style.top = (event.center.y-125)+"px";
+    document.querySelector('.circular-menu').style.left = (event.center.x-125)+"px";
+    document.querySelector('.circle').classList.add('open');
+  } else {
+    document.querySelector('.circle').classList.remove('open');
   }
-}
+})
+
 
 var links = document.querySelectorAll('.circular-menu a');
 for (i = 0; i < links.length; i++) {
