@@ -35,6 +35,7 @@
       left: 0;
       width:100%;
       height:100%;
+      transition: all 0.3s linear;
     }
 
   </style>
@@ -45,8 +46,8 @@
 <body>
   <video id="video" preload autoplay loop muted></video>
   <div id="main" class="menu-area">
-    <div id="overlay" style="background-color:green;">
-      <!--<canvas id="c"></canvas>-->
+    <div id="overlay" style="border: 1px solid green;">
+      <canvas id="c"></canvas>
 
     </div>
 
@@ -61,7 +62,7 @@
     </nav>
   </div>
 
-  <canvas id="videoCanvas"></canvas>
+  <canvas id="videoCanvas" style="display: hidden"></canvas>
 
   <script src="yjs/yjs/y.es6"></script>
   <script src="bower_components/fabric.js/dist/fabric.min.js"></script>
@@ -70,7 +71,7 @@
   <script src="bower_components/js_marker_detector/cv.js"></script>
   <script src="bower_components/js_marker_detector/polyfill.js"></script>
   <script src="bower_components/js_marker_detector/pupil.js"></script>
-  <!--<script src="index.js"></script>-->
+  <script src="index.js"></script>
   <script src="circular-menu.js"></script>
   <script>
     function setColor(color) {

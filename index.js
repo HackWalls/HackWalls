@@ -104,6 +104,17 @@
   hammer.on('pan', function (event) {
     var xPos = event.center.x
     var yPos = event.center.y
+    
+    var main = document.querySelector('#main');
+    xPos-=main.offsetLeft;
+    yPos-=main.offsetTop;
+    if(window.superTransfromMatrix){
+      var newPos = window.superTransfromMatrix.transformInverse(xPos, yPos);
+      xPos=newPos[0];
+      yPos=newPos[1];
+    }
+    
+    
     if (yPath === false) {
       yPath = null // trying to set yPath..
       var pos = y.share.drawings.length

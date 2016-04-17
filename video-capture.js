@@ -80,10 +80,18 @@ VideoCapture.prototype.resizeOverlay = function() {
     width = trueWidth;
   }
 
-  this.overlay.style.width = Math.min(width,height)+"px";
-  this.overlay.style.height = this.overlay.style.width;
-  this.overlay.style.left = (width-Math.min(width,height))/2 + "px";
-  this.overlay.style.top = (height-Math.min(width,height))/2 + "px";
+  var dim= Math.min(width,height);
+  this.main.style.width = dim+"px";
+  this.main.style.height = dim+"px";
+  this.main.style.left = (width-dim)/2 + "px";
+  this.main.style.top = (this.video.offsetHeight-dim)/2 + "px";
+  
+  /*
+  this.main.style.width = this.overlay.style.width;
+  this.main.style.height = this.overlay.style.height;
+  this.main.style.left = this.overlay.style.left;
+  this.main.style.top = this.overlay.style.top;
+  */
 
   if (this.transformCorners == null)
     return;
@@ -98,7 +106,7 @@ VideoCapture.prototype.resizeOverlay = function() {
  
 
   var perspT = PerspT(srcCorners, this.transformCorners);
-
+  window.superTransfromMatrix = perspT;
   var bums = [perspT.coeffs[0],perspT.coeffs[3],0,perspT.coeffs[6],
               perspT.coeffs[1],perspT.coeffs[4],0,perspT.coeffs[7],
               0,0,1,0,
@@ -171,7 +179,7 @@ function updateCorners(callback) {
         corners[j].x = (corners[j].x) * scaleX-100;
         corners[j].y = (corners[j].y) * scaleY;
       }
-      var mul= 20;
+      var mul= 10;
       var trans1 = {x: (corners[1].x-corners[0].x), y:(corners[1].y-corners[0].y)};
       var trans2 = {x: (corners[2].x-corners[0].x), y:(corners[2].y-corners[0].y)};
       var trans3 = {x: (corners[3].x-corners[0].x), y:(corners[3].y-corners[0].y)};
@@ -240,12 +248,13 @@ function updateCorners(callback) {
     //console.log(temp);
 
     if (temp) {
-      var difference = Math.abs(temp[0].x - currentCorners[0].x);
+      var difference = Math.abs(currentCorners[0].x -temp[0].x);
 
-      //if (difference > 50 && difference < 400) {
+      if (difference > 3) {
+        //console.log(currentCorners[0].x -temp[0].x);
         currentCorners = temp;
         callback(currentCorners);
-      //}
+      }
 
     }
 
