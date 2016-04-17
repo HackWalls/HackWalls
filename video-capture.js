@@ -1,3 +1,28 @@
+var vid;
+var leId = -1;
+
+navigator.mediaDevices.enumerateDevices()
+.then(function(devices) {
+
+  console.log(devices);
+
+  var str="";
+
+  devices.forEach(function(device) {
+    str += device.kind + ": " + device.label +
+                " id = " + device.deviceId + "\n";
+  });
+
+  var number = window.prompt(str,"0");
+
+  leId = devices[parseInt(number)].deviceId;
+
+  vid = new VideoCapture(document.getElementById("video"), document.getElementById("videoCanvas"), document.getElementById("overlay"), document.getElementById("main"));
+  updateCorners(function(a) {vid.setTransformation(a);});
+})
+
+
+
 function VideoCapture (video, canvas, overlay, main) {
   this.isStreaming = false;
   this.video = video;
@@ -6,12 +31,15 @@ function VideoCapture (video, canvas, overlay, main) {
   this.transformCorners = null;
   this.canvas = canvas;
   this.context = canvas.getContext("2d");
+
+navigator.mediaDevices.enumerateDevices
+
   navigator.getMedia = (navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia);
     navigator.getMedia({
-      video: true,
+      video: {optional: [{sourceId: leId}] },
       audio: false
     },
     function(stream) {
@@ -85,8 +113,19 @@ VideoCapture.prototype.resizeOverlay = function() {
   this.main.style.height = dim+"px";
   this.main.style.left = (this.video.offsetWidth-dim)/2 + "px";
   this.main.style.top = (this.video.offsetHeight-dim)/2 + "px";
-  
-  
+
+  var els = document.querySelectorAll(".canvas-container canvas");
+  for (var h = 0; h < els.length; h++) {
+/*
+    if (els[h].getAttribute("width") != els[h].offsetWidth)
+      els[h].setAttribute("width", els[h].offsetWidth);
+    if (els[h].getAttribute("height") != els[h].offsetHeight)
+      els[h].setAttribute("height", els[h].offsetHeight);
+      */
+  }
+
+
+
   /*
   this.main.style.width = this.overlay.style.width;
   this.main.style.height = this.overlay.style.height;
@@ -97,14 +136,14 @@ VideoCapture.prototype.resizeOverlay = function() {
   if (this.transformCorners == null)
     return;
 
- 
-    
+
+
   var srcCorners = [this.overlay.offsetLeft, this.overlay.offsetTop,
     this.overlay.offsetLeft+this.overlay.offsetWidth,this.overlay.offsetTop,
     this.overlay.offsetLeft+this.overlay.offsetWidth, this.overlay.offsetTop+this.overlay.offsetHeight,
     this.overlay.offsetLeft, this.overlay.offsetTop+this.overlay.offsetHeight];
 
- 
+
 
   var perspT = PerspT(srcCorners, this.transformCorners);
   window.superTransfromMatrix = perspT;
@@ -128,9 +167,6 @@ VideoCapture.prototype.getImageData = function() {
   }
 
 }
-
-var vid = new VideoCapture(document.getElementById("video"), document.getElementById("videoCanvas"), document.getElementById("overlay"), document.getElementById("main"));
-updateCorners(function(a) {vid.setTransformation(a);});
 
 
 function updateCorners(callback) {
@@ -183,21 +219,29 @@ function updateCorners(callback) {
         corners[j].x = (corners[j].x) * scaleX-100;
         corners[j].y = (corners[j].y) * scaleY;
       }
-      var mul= 10;
+      var mul= 20;
       var trans1 = {x: (corners[1].x-corners[0].x), y:(corners[1].y-corners[0].y)};
       var trans2 = {x: (corners[2].x-corners[0].x), y:(corners[2].y-corners[0].y)};
       var trans3 = {x: (corners[3].x-corners[0].x), y:(corners[3].y-corners[0].y)};
-      
+
       corners[1].x=trans1.x*mul+corners[0].x;
       corners[2].x=trans2.x*mul+corners[0].x;
       corners[3].x=trans3.x*mul+corners[0].x;
-      
+
       corners[1].y=trans1.y*mul+corners[0].y;
       corners[2].y=trans2.y*mul+corners[0].y;
       corners[3].y=trans3.y*mul+corners[0].y;
-     
-      
-      
+
+      var width = (corners[2].x - corners[0].x)/2;
+      var height = (corners[2].y-corners[0].y)/2
+
+      for (var i=0;i<corners.length; i++) {
+        corners[i].x-=width;
+        corners[i].y-=height;
+      }
+
+
+
     }
 
     return corners;
@@ -263,5 +307,5 @@ function updateCorners(callback) {
     }
 
     //drawCorners(markers);
-  }, 200);
+  }, 100);
 }

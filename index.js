@@ -104,17 +104,28 @@
   hammer.on('pan', function (event) {
     var xPos = event.center.x
     var yPos = event.center.y
-    
+
     var main = document.querySelector('#main');
     xPos-=main.offsetLeft;
     yPos-=main.offsetTop;
+    //xPos/=  document.getElementById("c").getAttribute("width") / document.getElementById("main").offsetWidth;
+    //yPos /=  document.getElementById("c").getAttribute("height")/ document.getElementById("main").offsetHeight;
+    var w = document.getElementById("c").getBoundingClientRect().width;
+    var h = document.getElementById("c").getBoundingClientRect().height;
+    xPos *= 1000/w
+    yPos *= 1000/h
+
+    //console.log(w);
+
     if(window.superTransfromMatrix){
+
+
       var newPos = window.superTransfromMatrix.transformInverse(xPos, yPos);
       xPos=newPos[0];
       yPos=newPos[1];
     }
-    
-    
+
+
     if (yPath === false) {
       yPath = null // trying to set yPath..
       var pos = y.share.drawings.length

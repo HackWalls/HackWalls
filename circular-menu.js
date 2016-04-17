@@ -9,8 +9,8 @@ for(var i = 0, l = items.length; i < l; i++) {
 
 hammer.on('press', function(event) {
   if (!document.querySelector('.circle').classList.contains('open')) {
-    document.querySelector('.circular-menu').style.top = (event.center.y-125)+"px";
-    document.querySelector('.circular-menu').style.left = (event.center.x-125)+"px";
+    document.querySelector('.circular-menu').style.top = (event.center.y-125 - document.getElementById("main").offsetTop)+"px";
+    document.querySelector('.circular-menu').style.left = (event.center.x-125 - document.getElementById("main").offsetLeft)+"px";
     document.querySelector('.circle').classList.add('open');
   } else {
     document.querySelector('.circle').classList.remove('open');
