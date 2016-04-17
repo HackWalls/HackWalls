@@ -11,7 +11,7 @@ function VideoCapture (video, canvas, overlay, main) {
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia);
     navigator.getMedia({
-      video: true,
+      video: { frameRate: { ideal: 1, max: 2 }, width: 100, height: 100 },
       audio: false
     },
     function(stream) {
