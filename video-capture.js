@@ -83,8 +83,9 @@ VideoCapture.prototype.resizeOverlay = function() {
   var dim= Math.min(width,height);
   this.main.style.width = dim+"px";
   this.main.style.height = dim+"px";
-  this.main.style.left = (width-dim)/2 + "px";
+  this.main.style.left = (this.video.offsetWidth-dim)/2 + "px";
   this.main.style.top = (this.video.offsetHeight-dim)/2 + "px";
+  
   
   /*
   this.main.style.width = this.overlay.style.width;
@@ -172,7 +173,7 @@ function updateCorners(callback) {
 
 
       if(corners[3].y < corners[0].y){
-        return null;
+       // return null;
       }
       for (j = 0; j < corners.length; ++j) {
 
@@ -250,7 +251,7 @@ function updateCorners(callback) {
     if (temp) {
       var difference = Math.abs(currentCorners[0].x -temp[0].x);
 
-      if (difference > 3) {
+      if (difference > 1) {
         //console.log(currentCorners[0].x -temp[0].x);
         currentCorners = temp;
         callback(currentCorners);
