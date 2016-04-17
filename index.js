@@ -110,20 +110,20 @@
     yPos-=main.offsetTop;
     //xPos/=  document.getElementById("c").getAttribute("width") / document.getElementById("main").offsetWidth;
     //yPos /=  document.getElementById("c").getAttribute("height")/ document.getElementById("main").offsetHeight;
-    var w = document.getElementById("c").getBoundingClientRect().width;
-    var h = document.getElementById("c").getBoundingClientRect().height;
-    xPos *= 1000/w
-    yPos *= 1000/h
+    var w = document.getElementById("c").offsetWidth;
+    var h = document.getElementById("c").offsetHeight;
+
 
     //console.log(w);
 
     if(window.superTransfromMatrix){
-
-
       var newPos = window.superTransfromMatrix.transformInverse(xPos, yPos);
       xPos=newPos[0];
       yPos=newPos[1];
     }
+
+    xPos *= 1000/w
+    yPos *= 1000/h
 
 
     if (yPath === false) {
