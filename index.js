@@ -26,7 +26,7 @@
     connector: {
       name: 'webrtc',
       room: 'hackAR5',
-      url: 'https://yjs.dbis.rwth-aachen.de:5078'
+      url: 'https://yjs.dbis.rwth-aachen.de:5078'//'http://134.61.141.107:1234'//'https://yjs.dbis.rwth-aachen.de:5078'
     },
     sourceDir: './yjs',
     share: {

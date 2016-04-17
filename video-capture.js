@@ -172,8 +172,11 @@ function updateCorners(callback) {
       var corners = markers[0].corners;
 
 
-      if(corners[3].y < corners[0].y){
-       // return null;
+      if(markers[0].id!==0){
+        return null;
+      }
+      if(corners[1].x < corners[3].x){
+        return null;
       }
       for (j = 0; j < corners.length; ++j) {
 
@@ -202,7 +205,7 @@ function updateCorners(callback) {
 
   }
 
-  function drawCorners(markers) {
+  /*function drawCorners(markers) {
     var overlayCanvas = document.getElementById("c");
     var corners, corner, i, j;
     var context = overlayCanvas.getContext("2d");
@@ -232,7 +235,7 @@ function updateCorners(callback) {
       context.closePath();
 
     }
-  }
+  }*/
 
 
 
@@ -260,5 +263,5 @@ function updateCorners(callback) {
     }
 
     //drawCorners(markers);
-  }, 100);
+  }, 200);
 }
