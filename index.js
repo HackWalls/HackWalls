@@ -8,15 +8,17 @@
     strokeWidth: 15
   }
   window.hammer = new Hammer(document.querySelector('#main'))
-
-  // not globals :(
-  var gWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
-  var gHeight = window.innerHeight > 0 ? window.innerHeight : screen.height
+  window.gWidth = window.innerWidth > 0 ? window.innerWidth : screen.width
+  window.gHeight = window.innerHeight > 0 ? window.innerHeight : screen.height
   var canvas = this.__canvas = new fabric.Canvas('c', {
     // isDrawingMode: true,
     width: gWidth,
     height: gHeight
   })
+  var video = document.querySelector('#video')
+  // video.setAttribute('style', 'height:'+gHeight+';width:'+gWidth+';')
+  video.setAttribute('width', gWidth)
+  video.setAttribute('height', gHeight)
   canvas.selection = false
 
   Y({
@@ -25,7 +27,9 @@
     },
     connector: {
       name: 'webrtc',
-      room: 'hackAR4'
+      room: 'hackAR7',
+      url: 'https://yjs.dbis.rwth-aachen.de:5078'
+      // url: 'http://134.61.70.151:1234'
     },
     sourceDir: './yjs',
     share: {
@@ -68,6 +72,7 @@
       drawingPath.setHeight(dims.height)
       drawingPath.pathOffset.x = drawingPath.width/2
       drawingPath.pathOffset.y = drawingPath.height/2
+
       drawingPath.setCoords()
       canvas.renderAll()
     }
@@ -79,9 +84,7 @@
         canvas.add(path)
         computePath(path, t)
         t.observe(function (events) {
-          events.forEach(function (e) {
-            computePath(path, t)
-          })
+          computePath(path, t)
         })
       }
     }
@@ -100,25 +103,32 @@
 
   var yPath = false
   // listen to events...
+  var lastPos = {x: 0, y: 0}
   hammer.on('pan', function (event) {
-    var xPos = event.center.x
-    var yPos = event.center.y
-    console.log(event)
-    if (yPath === false) {
-      yPath = null // trying to set yPath..
-      var pos = y.share.drawings.length
-      y.share.drawings.insert(pos, [Y.Array])
-      y.share.drawings.get(pos).then(function (array) {
-        yPath = array
-        var strokeWidth = paintConfig.strokeWidth
-        yPath.insert(0, [{
-          color: paintConfig.color,
-          strokeWidth: strokeWidth
-        }, [(xPos - strokeWidth) / gWidth, (yPos - strokeWidth) / gHeight]])
-      })
-    } else if (yPath != null) {
-      var strokeWidth = yPath.get(0).strokeWidth
-      yPath.push([[(xPos - strokeWidth) / gWidth, (yPos - strokeWidth) / gHeight]])
+    // only if distance > 10
+    console.log('dissss tance', Math.sqrt(Math.pow(lastPos.x - event.center.x, 2) + Math.pow(lastPos.y - event.center.y, 2)))
+    if (Math.sqrt(Math.pow(lastPos.x - event.center.x, 2) + Math.pow(lastPos.y - event.center.y, 2)) > 4) {
+      lastPos.x = event.center.x
+      lastPos.y = event.center.y
+      var c = transformCoordinates(event.center)
+      var xPos = c.x
+      var yPos = c.y
+      if (yPath === false) {
+        yPath = null // trying to set yPath..
+        var pos = y.share.drawings.length
+        y.share.drawings.insert(pos, [Y.Array])
+        y.share.drawings.get(pos).then(function (array) {
+          yPath = array
+          var strokeWidth = paintConfig.strokeWidth
+          yPath.insert(0, [{
+            color: paintConfig.color,
+            strokeWidth: strokeWidth
+          }, [(xPos - strokeWidth) / gWidth, (yPos - strokeWidth) / gHeight]])
+        })
+      } else if (yPath != null) {
+        var strokeWidth = yPath.get(0).strokeWidth
+        yPath.push([[(xPos - strokeWidth) / gWidth, (yPos - strokeWidth) / gHeight]])
+      }
     }
     if (event.isFinal) {
       yPath = false
