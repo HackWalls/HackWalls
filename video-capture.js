@@ -88,18 +88,16 @@ VideoCapture.prototype.resizeOverlay = function() {
   if (this.transformCorners == null)
     return;
 
-console.log("points", this.transformCorners);
+ 
+    
+  var srcCorners = [this.overlay.offsetLeft, this.overlay.offsetTop,
+    this.overlay.offsetLeft+this.overlay.offsetWidth,this.overlay.offsetTop,
+    this.overlay.offsetLeft+this.overlay.offsetWidth, this.overlay.offsetTop+this.overlay.offsetHeight,
+    this.overlay.offsetLeft, this.overlay.offsetTop+this.overlay.offsetHeight];
 
-  var srcCorners = [this.overlay.offsetLeft, 0,
-    this.overlay.offsetLeft+this.overlay.offsetWidth,0,
-    this.overlay.offsetLeft+this.overlay.offsetWidth, 0+this.overlay.offsetHeight,
-    this.overlay.offsetLeft, 0+this.overlay.offsetHeight];
-
-    console.log("src",srcCorners);
+ 
 
   var perspT = PerspT(srcCorners, this.transformCorners);
-
-  console.log(perspT.coeffs);
 
   var bums = [perspT.coeffs[0],perspT.coeffs[3],0,perspT.coeffs[6],
               perspT.coeffs[1],perspT.coeffs[4],0,perspT.coeffs[7],
@@ -108,7 +106,7 @@ console.log("points", this.transformCorners);
               ];
 
   this.overlay.style.transform = "matrix3d("+bums.join(",")+")";
-//  this.overlay.style.transformOrigin = '50% 50%';
+  this.overlay.style.transformOrigin = '0% 0%';
 }
 
 VideoCapture.prototype.getImageData = function() {
@@ -164,12 +162,30 @@ function updateCorners(callback) {
     if (markers !== null && markers.length >= 1) {
       var corners = markers[0].corners;
 
+
+      if(corners[3].y < corners[0].y){
+        return null;
+      }
       for (j = 0; j < corners.length; ++j) {
 
-        corners[j].x = corners[j].x * scaleX;
-        corners[j].y = corners[j].y * scaleY;
+        corners[j].x = (corners[j].x) * scaleX-100;
+        corners[j].y = (corners[j].y) * scaleY;
       }
-
+      var mul= 20;
+      var trans1 = {x: (corners[1].x-corners[0].x), y:(corners[1].y-corners[0].y)};
+      var trans2 = {x: (corners[2].x-corners[0].x), y:(corners[2].y-corners[0].y)};
+      var trans3 = {x: (corners[3].x-corners[0].x), y:(corners[3].y-corners[0].y)};
+      
+      corners[1].x=trans1.x*mul+corners[0].x;
+      corners[2].x=trans2.x*mul+corners[0].x;
+      corners[3].x=trans3.x*mul+corners[0].x;
+      
+      corners[1].y=trans1.y*mul+corners[0].y;
+      corners[2].y=trans2.y*mul+corners[0].y;
+      corners[3].y=trans3.y*mul+corners[0].y;
+     
+      
+      
     }
 
     return corners;
@@ -221,7 +237,7 @@ function updateCorners(callback) {
 
     var temp = getCorners(markers);
 
-    console.log(temp);
+    //console.log(temp);
 
     if (temp) {
       var difference = Math.abs(temp[0].x - currentCorners[0].x);
@@ -234,5 +250,5 @@ function updateCorners(callback) {
     }
 
     //drawCorners(markers);
-  }, 500);
+  }, 100);
 }
